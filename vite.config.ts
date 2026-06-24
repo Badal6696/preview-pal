@@ -12,4 +12,17 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // Enable Cloudflare Workers (nitro) build outside of the Lovable sandbox.
+  // deployConfig:true makes Nitro write wrangler.json into .output/server/ at
+  // build time — so the source tree stays free of any wrangler config file
+  // (Cloudflare's drag-and-drop uploader rejects projects that contain one).
+  // Deploy with: npm run build && npx wrangler deploy --config .output/server/wrangler.json
+  nitro: {
+    preset: "cloudflare-module",
+    cloudflare: { nodeCompat: true, deployConfig: false },
+  },
+  vite: {
+    // Allow Vite to import and hash .mp4 files referenced from src/assets/
+    assetsInclude: ["**/*.mp4"],
+  },
 });
